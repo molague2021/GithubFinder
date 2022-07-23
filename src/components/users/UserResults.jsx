@@ -1,33 +1,47 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useContext} from 'react';
+import Spinner from '../layout/Spinner';
+import UserItem from './UserItem';
+import GithubContext from '../../context/github/GithubContext';
 
 function UserResults() {
-    const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState([true]);
+    // Moving these to context, use to be used here for useState.
+    // const [users, setUsers] = useState([]);
+    // const [loading, setLoading] = useState(true);
+    // const fecthUsers = async () => {
+    //     const response = await fetch(`${process.env.REACT_APP_GITHUB_URL}/users`, {
+    //         headers: {
+    //             Authorization: `token ${process.env.REACT_APP_GITHUB_TOKEN}`,
+    //         }
+    //     });
 
-    useEffect(() => {
-        fecthUsers();
-    }, [])
+    //     const data = await response.json();
 
-    const fecthUsers = async () => {
-        const response = await fetch(`${process.env.REACT_APP_GITHUB_URL}/users`, {
-            headers: {
-                Authorization: `token ${process.env.REACT_APP_GITHUB_TOKEN}`,
-            }
-        });
+    //     setUsers(data);
+    //     setLoading(false);
+    // }
 
-        const data = await response.json();
+    // Bringing in these from useContext instead of using the data here
+    const {
+        users, 
+        loading,
+        // fetchUser //// Removing as it doesnt need to be here anymore
+    } = useContext(GithubContext);
 
-        setUsers(data);
-        setLoading(false);
-    }
+    // Calling fetch users a different way, using a the user search component
+    // useEffect(() => {
+    //     fecthUsers();
+    // }, [])
+
     if(!loading){
         return (
-            <div className='grid grid-cols-1 gap-8 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2'>{users.map((user) => (
-                <h3>{user.login}</h3>
-            ))}</div>
+            <div className='grid grid-cols-1 gap-8 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2'>
+                {users.map((user) => (
+                    <UserItem key={user.id} user={user} />
+                ))}
+            </div>
           )
     } else {
-        return <h3>Loading...</h3>
+        return <Spinner />
     }
   
 }
