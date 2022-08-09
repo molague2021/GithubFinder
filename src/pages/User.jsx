@@ -3,10 +3,12 @@ import { FaCodepen, FaStore, FaUserFriends, FaUsers } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Spinner from '../components/layout/Spinner';
+import RepoList from '../components/repos/RepoList';
 import GithubContext from '../context/github/GithubContext';
 
 function User() {
-  const { getUser, user, loading } = useContext(GithubContext);
+  const { getUser, user, loading, getUserRepos, repos } =
+    useContext(GithubContext);
   const params = useParams();
 
   const {
@@ -28,6 +30,7 @@ function User() {
 
   useEffect(() => {
     getUser(params.login);
+    getUserRepos(params.login);
   }, []);
 
   if (loading) {
@@ -38,7 +41,7 @@ function User() {
     <>
       <div className="w-full mx-auto lg:w-10/12">
         <div className="mb-4">
-          <Link to="/" classname="btn btn-ghost">
+          <Link to="/" className="btn btn-ghost">
             Back to Search
           </Link>
         </div>
@@ -151,6 +154,8 @@ function User() {
             </div>
           </div>
         </div>
+
+        <RepoList repos={repos} />
       </div>
     </>
   );

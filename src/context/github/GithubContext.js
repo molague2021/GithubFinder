@@ -74,6 +74,27 @@ export const GithubProvider = ({ children }) => {
     }
   };
 
+  // Get user repos
+  const getUserRepos = async (login) => {
+    setLoading();
+
+    const params = new URLSearchParams({
+      sort: 'created',
+      per_page: 10,
+    });
+
+    const response = await fetch(
+      `${GITHUB_URL}/users/${login}/repos?${params}`
+    );
+
+    const data = await response.json();
+
+    dispatch({
+      type: 'GET_USER_REPOS',
+      payload: data,
+    });
+  };
+
   const setLoading = () => {
     dispatch({ type: 'SET_LOADING' });
   };
@@ -89,8 +110,10 @@ export const GithubProvider = ({ children }) => {
         users: state.users,
         user: state.user,
         loading: state.loading,
+        repos: state.repos,
         fecthUsers,
         getUser,
+        getUserRepos,
         searchUsers,
         removeUsers,
       }}
