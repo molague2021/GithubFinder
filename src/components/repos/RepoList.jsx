@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-//import RepoItem from './RepoItem';
+import RepoItem from './RepoItem';
 
 function RepoList({ repos }) {
   return (
@@ -9,8 +9,7 @@ function RepoList({ repos }) {
           Latest Repositories
         </h2>
         {repos?.map((repo) => (
-          //<RepoItem key={repo.id} repo={repo} />
-          <h3 key={repo.id}>{repo.name}</h3>
+          <RepoItem key={repo?.id} repo={repo} />
         ))}
       </div>
     </div>
@@ -18,7 +17,7 @@ function RepoList({ repos }) {
 }
 
 RepoList.propTypes = {
-  repos: PropTypes.array.isRequired,
+  repos: PropTypes.array,
 };
 
 export default RepoList;
