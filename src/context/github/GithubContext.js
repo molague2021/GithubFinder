@@ -21,85 +21,11 @@ export const GithubProvider = ({ children }) => {
   // Use the useReducer hook, which returns two things state and dispatch
   const [state, dispatch] = useReducer(githubReducer, initialState);
 
-  // FETCH USERS: Get initial users for testing purposes
-  const fecthUsers = async () => {
-    setLoading();
-    const response = await fetch(`${GITHUB_URL}/users`, {
-      headers: {
-        Authorization: `token ${GITHUB_TOKEN}`,
-      },
-    });
-
-    const data = await response.json();
-
-    dispatch({
-      type: 'GET_USERS',
-      payload: data,
-    });
-  };
-
-  // Get search users
-  const getUser = async (login) => {
-    setLoading();
-
-    const response = await fetch(`${GITHUB_URL}/users/${login}`);
-
-    if (response.status === 404) {
-      window.location = '/notfound';
-    } else {
-      const data = await response.json();
-
-      dispatch({
-        type: 'GET_USER',
-        payload: data,
-      });
-    }
-  };
-
-  // Get user repos
-  const getUserRepos = async (login) => {
-    setLoading();
-
-    const params = new URLSearchParams({
-      sort: 'created',
-      per_page: 10,
-    });
-
-    const response = await fetch(
-      `${GITHUB_URL}/users/${login}/repos?${params}`
-    );
-
-    const data = await response.json();
-
-    dispatch({
-      type: 'GET_USER_REPOS',
-      payload: data,
-    });
-  };
-
-  const setLoading = () => {
-    dispatch({ type: 'SET_LOADING' });
-  };
-
-  // clear users from state
-  const removeUsers = () => {
-    dispatch({ type: 'REMOVE_USERS' });
-  };
-
   return (
     <GithubContext.Provider
       value={{
-        // users: state.users,
-        // user: state.user,
-        // loading: state.loading,
-        // repos: state.repos,
         ...state,
         dispatch,
-        fecthUsers,
-        getUser,
-        getUserRepos,
-        //searchUsers,
-        removeUsers,
       }}
     >
       {children}
